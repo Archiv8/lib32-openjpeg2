@@ -1,5 +1,5 @@
 pkgbase = lib32-openjpeg2
-	pkgdesc = An open source JPEG 2000 codec, version 2.5.0
+	pkgdesc = An open source JPEG 2000 codec
 	pkgver = 2.5.0
 	pkgrel = 1
 	url = http://www.openjpeg.org
