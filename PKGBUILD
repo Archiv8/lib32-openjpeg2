@@ -1,29 +1,30 @@
 #!/bin/bash
 
-# Created from the original package by
+# Created from the original package by Alexandre Demers <alexandre.f.demers@gmail.com>
 
 # Disable various shellcheck rules that produce false positives in this file.
 # Repository rules should be added to the .shellcheckrc file located in the
 # repository root directory, see https://github.com/koalaman/shellcheck/wiki
 # and https://archiv8.github.io for further information.
 # shellcheck disable=SC2034,SC2154
-# [Query]: Is package still being maintained.  Last release was 3.100, 2017-10-13.  Latest commit was 2021-06-19.
 # [ToDo]: Add files: User documentation
 # [ToDo]: Add files: Tooling
 # [FixMe]: Namcap warnings and errors
 
-# Maintainer: Alexandre Demers <alexandre.f.demers@gmail.com>
+# Maintainer: Ross Clark <https://github.com/Archiv8/lib32-openjpeg2/discussions>
+# Contributor: Ross Clark <https://github.com/Archiv8/lib32-openjpeg2/discussions>
 
 _relname=openjpeg2
+
 pkgname="lib32-${_relname}"
-pkgver=2.4.0
+pkgver=2.5.0
 pkgrel=1
 pkgdesc="An open source JPEG 2000 codec, version ${pkgver}"
 arch=("x86_64")
 license=("BSD")
 url="http://www.openjpeg.org"
 makedepends=(
-  "cmake" 
+  "cmake"
   "lib32-libpng"
   "lib32-libtiff"
   "lib32-lcms2"
@@ -37,7 +38,7 @@ source=(
   "https://github.com/uclouvain/openjpeg/archive/v${pkgver}.tar.gz"
 )
 sha512sums=(
-  "55daab47d33823af94e32e5d345b52c251a5410f0c8e0a13b693f17899eedc8b2bb107489ddcba9ab78ef17dfd7cd80d3c5ec80c1e429189cb041124b67e07a8"
+  "08975a2dd79f1e29fd1824249a5fbe66026640ed787b3a3aa8807c2c69f994240ff33e2132f8bf15bbc2202bef7001f98e42d487231d4eebc8e503538658049a"
 )
 
 prepare() {
@@ -45,12 +46,15 @@ prepare() {
 
   # Patching if needed
 }
+
+
 build() {
   export CFLAGS="-m32"
   export CXXFLAGS="-m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd build
+
   cmake "../openjpeg-$pkgver" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -64,10 +68,10 @@ build() {
 package() {
   make -C build DESTDIR="${pkgdir}" install
 
-  # removing unneeded files and folders
+  # Remove unwanted files and folders, including those that may clash with openjpeg2
   rm -rf "${pkgdir}/usr/"{bin,include}
 
-  # installing license
+  # Install license
   mkdir -p "${pkgdir}/usr/share/licenses/${pkgname}/"
   ln -s "/usr/share/licenses/${_relname}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
